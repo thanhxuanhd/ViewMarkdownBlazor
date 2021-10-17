@@ -7,7 +7,18 @@
 
 <h2>View Markdown Manager</h2>
 
-<FolderTemplate Items="Items"></FolderTemplate>
+@if (Items.Any())
+{
+    <FolderTemplate Items="Items"></FolderTemplate>
+}
+else
+{
+    <div class="card m-2 p-1">
+        <div class="card-body text-center">
+             <b>Folder Empty</b>
+        </div>
+    </div>
+}
 
 
 @code {
