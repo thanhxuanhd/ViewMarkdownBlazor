@@ -1,0 +1,76 @@
+﻿@page "/ViewFolder/{FilePath?}"
+@inject NavigationManager NavigationHelper
+
+<h2>
+    Markdown Items 
+    @if(!string.IsNullOrEmpty(FilePath))
+    {
+        <span>@Path.GetFileName(FilePath)</span>
+    }
+</h2>
+
+@if (MarkdownItems != null)
+{
+    <MarkdownItemTemplate Items="MarkdownItems"></MarkdownItemTemplate>
+}
+
+@code {
+
+    [Parameter]
+    public string FilePath { get; set; } = string.Empty;
+
+    public List<MarkdownItem> MarkdownItems { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+
+        string filePath = string.Empty;
+        var uri = NavigationHelper.ToAbsoluteUri(NavigationHelper.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("FilePath", out var value))
+        {
+            filePath = value.First();
+        }
+
+        if (!string.IsNullOrEmpty(filePath))
+        {
+            FilePath = Encoding.UTF8.GetString(Convert.FromBase64String(filePath));
+
+            GetMarkdownItemFile();
+        }
+    }
+
+    private void GetMarkdownItemFile()
+    {
+        try
+        {
+            if (Directory.Exists(FilePath))
+            {
+                var files = Directory.GetFiles(FilePath, "*.md", SearchOption.AllDirectories).ToList();
+
+                if (files.Any())
+                {
+                    List<MarkdownItem> markdowns = new();
+                    files.ForEach(f =>
+                    {
+                        if (File.Exists(f))
+                        {
+                            MarkdownItem markdown = new()
+                                {
+                                    FilePath = f,
+                                    FolderName = Path.GetDirectoryName(f),
+                                    Name = Path.GetFileName(f)
+                                };
+                            markdowns.Add(markdown);
+                        }
+                    });
+
+                    MarkdownItems = markdowns;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+}
