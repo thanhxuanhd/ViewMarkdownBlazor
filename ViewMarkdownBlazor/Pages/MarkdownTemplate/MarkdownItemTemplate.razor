@@ -1,0 +1,37 @@
+﻿@if (Items != null)
+{
+    <div class="row">
+        @foreach (var item in Items)
+        {
+            <div class="col-12 col-sm-12 col-xs-12 col-md-6 col-lg-3 col-xl-3">
+                <div class="card m-2 p-1">
+                    <div class="card-body">
+                        <div title="@item.FilePath">
+                            <span>
+                                @item.Name
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-footer p-1">
+                        <div class="text-end">
+                            @if (!string.IsNullOrEmpty(item.FilePath))
+                            {
+                                var pathEncode = Convert.ToBase64String(Encoding.UTF8.GetBytes(item.FilePath));
+
+                                <NavLink href="@{$"/ViewMarkdownDetail?MarkdownFilePath={pathEncode}"}" class="nav-link">
+                                    <span>View</span>
+                                </NavLink>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+}
+
+@code {
+    [Parameter]
+    public List<MarkdownItem> Items { get; set; } = new();
+}
