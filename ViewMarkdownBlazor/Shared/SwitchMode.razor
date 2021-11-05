@@ -1,0 +1,16 @@
+﻿@inject ILocalStorageService localStore
+
+<MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@((e) => ToggleDarkMode())" />
+
+@code {
+    [Parameter]
+    public MudTheme CurrentAppTheme { get; set; }
+
+    [Parameter]
+    public EventCallback OnDarkModeToggle { get; set; }
+
+    public async Task ToggleDarkMode()
+    {
+        await OnDarkModeToggle.InvokeAsync();
+    }
+}

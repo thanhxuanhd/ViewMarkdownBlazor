@@ -1,33 +1,36 @@
-﻿@if (Items != null)
+﻿@inject NavigationManager UrlHelper;
+
+@if (Items != null)
 {
-    <div class="row">
+    <MudGrid>
         @foreach (var item in Items)
         {
-            <div class="col-12 col-sm-12 col-xs-12 col-md-6 col-lg-3 col-xl-3">
-                <div class="card m-2 p-1">
-                    <div class="card-body">
-                        <div title="@item.FilePath">
-                            <span>
-                                @item.Name
-                            </span>
-                        </div>
-                    </div>
-                    <div class="card-footer p-1">
-                        <div class="text-end">
-                            @if (!string.IsNullOrEmpty(item.FilePath))
-                            {
-                                var pathEncode = Convert.ToBase64String(Encoding.UTF8.GetBytes(item.FilePath));
+            <MudItem xs="6" sm="4">
+                <MudCard Outlined="true">
+                    <MudCardContent>
+                        <MudText>
+                            <div title="@item.FilePath">
+                                <span>
+                                    @item.Name
+                                </span>
+                            </div>
+                        </MudText>
+                    </MudCardContent>
+                    <MudCardActions>
 
-                                <NavLink href="@{$"/ViewMarkdownDetail?MarkdownFilePath={pathEncode}"}" class="nav-link">
-                                    <span>View</span>
-                                </NavLink>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        @if (!string.IsNullOrEmpty(item.FilePath))
+                        {
+                            var pathEncode = Convert.ToBase64String(Encoding.UTF8.GetBytes(item.FilePath));
+                            var link = $"./ViewMarkdownDetail?MarkdownFilePath={pathEncode}";
+                            <MudNavLink Href="@link" Icon="@Icons.Material.Outlined.Inbox">
+                                <span>View</span>
+                            </MudNavLink>
+                        }
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
         }
-    </div>
+    </MudGrid>
 
 }
 

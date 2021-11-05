@@ -1,18 +1,19 @@
 ﻿@page "/ViewFolder/{FilePath?}"
 @inject NavigationManager NavigationHelper
-
-<h2>
-    Markdown Items 
-    @if(!string.IsNullOrEmpty(FilePath))
+<MudContainer>
+    <MudText Typo="Typo.h4" Class="mb-5">
+         Markdown Items
+        @if (!string.IsNullOrEmpty(FilePath))
+        {
+            <span>@Path.GetFileName(FilePath)</span>
+        }
+    </MudText>
+    @if (MarkdownItems != null)
     {
-        <span>@Path.GetFileName(FilePath)</span>
+        <MarkdownItemTemplate Items="MarkdownItems"></MarkdownItemTemplate>
     }
-</h2>
+</MudContainer>
 
-@if (MarkdownItems != null)
-{
-    <MarkdownItemTemplate Items="MarkdownItems"></MarkdownItemTemplate>
-}
 
 @code {
 

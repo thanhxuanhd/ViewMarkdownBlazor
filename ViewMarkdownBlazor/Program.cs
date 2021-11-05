@@ -1,10 +1,18 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Blazored.LocalStorage;
+using MudBlazor.Services;
+using System.Globalization;
+using ViewMarkdownBlazor.Data;
+using ViewMarkdownBlazor.Preferences;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddBlazoredLocalStorage();
+builder.Services.AddMudServices()
+    .AddScoped<IClientPreferenceManager, ClientPreferenceManager>();
+
 
 var app = builder.Build();
 

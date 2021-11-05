@@ -1,19 +1,55 @@
 ﻿@inherits LayoutComponentBase
+@using MudBlazor
+@inject IClientPreferenceManager _clientPreferenceManager
 
 <PageTitle>ViewMarkdownBlazor</PageTitle>
+<MudThemeProvider Theme="_currentTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+<MudRTLProvider>
+    <MudLayout>
+        <MudAppBar Elevation="1">
+            <MudIcon Icon="@Icons.Filled.Reviews" Size="Size.Large" />
+            <MudText Typo="Typo.h6" Class="ml-4">View Markdown</MudText>
+            <MudToolBar DisableGutters="false">
+                <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => ToggleNavMenu())" Class="ml-3" />
+            </MudToolBar>
+             <MudSpacer />
+            <SwitchMode CurrentAppTheme="_currentTheme" OnDarkModeToggle="ToggleDarkMode"></SwitchMode>
+        </MudAppBar>
+        <MudDrawer Open="collapseNavMenu" ClipMode="DrawerClipMode.Always" Elevation="2">
+            <NavMenu />
+        </MudDrawer>
+        <MudMainContent Class="mt-5 px-8">
             @Body
-        </article>
-    </main>
-</div>
+        </MudMainContent>
+    </MudLayout>
+</MudRTLProvider>
+
+
+@code {
+    private MudTheme _currentTheme;
+
+    private bool collapseNavMenu = true;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        _currentTheme = ViewMarkdownTheme.DefaultTheme;
+        _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
+    }
+
+    public async Task ToggleDarkMode()
+    {
+        bool isDarkMode = await _clientPreferenceManager.ToggleDarkModeAsync();
+        _currentTheme = isDarkMode
+            ? ViewMarkdownTheme.DefaultTheme
+            : ViewMarkdownTheme.DarkTheme;
+    }
+}
+

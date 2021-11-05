@@ -1,9 +1,10 @@
 ﻿@page "/ViewMarkdownDetail/{MarkdownFilePath?}"
 @inject NavigationManager NavigationHelper
 
-<div class="container">
+<MudContainer MaxWidth="MaxWidth.Large" Class="mb-5">
     @((MarkupString)MarkdownDocument)
-</div>
+</MudContainer>
+
 @code {
     [Parameter]
     public string MarkdownFilePath { get; set; } = string.Empty;
