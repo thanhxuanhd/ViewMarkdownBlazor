@@ -2,7 +2,7 @@
 @inject NavigationManager NavigationHelper
 <MudContainer>
     <MudText Typo="Typo.h4" Class="mb-5">
-         Markdown Items
+        Markdown Items
         @if (!string.IsNullOrEmpty(FilePath))
         {
             <span>@Path.GetFileName(FilePath)</span>
@@ -18,24 +18,16 @@
 @code {
 
     [Parameter]
+    [SupplyParameterFromQuery]
     public string FilePath { get; set; } = string.Empty;
 
     public List<MarkdownItem> MarkdownItems { get; set; } = new();
 
     protected override void OnInitialized()
     {
-
-        string filePath = string.Empty;
-        var uri = NavigationHelper.ToAbsoluteUri(NavigationHelper.Uri);
-
-        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("FilePath", out var value))
+        if (!string.IsNullOrEmpty(FilePath))
         {
-            filePath = value.First();
-        }
-
-        if (!string.IsNullOrEmpty(filePath))
-        {
-            FilePath = Encoding.UTF8.GetString(Convert.FromBase64String(filePath));
+            FilePath = Encoding.UTF8.GetString(Convert.FromBase64String(FilePath));
 
             GetMarkdownItemFile();
         }
@@ -66,7 +58,7 @@
                         }
                     });
 
-                    MarkdownItems = markdowns;
+                    MarkdownItems = markdowns.OrderBy(x => x.Name).ToList();
                 }
             }
         }

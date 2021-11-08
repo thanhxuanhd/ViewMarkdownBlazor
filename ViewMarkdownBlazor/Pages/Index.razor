@@ -10,7 +10,7 @@
 
     @if (Items.Any())
     {
-      <FolderTemplate Items="Items"></FolderTemplate>
+        <FolderTemplate Items="Items"></FolderTemplate>
     }
     else
     {
@@ -90,7 +90,7 @@
             viewMarkdownItems.Add(fileMarkdown);
         }
 
-        Items = viewMarkdownItems;
+        Items = viewMarkdownItems.OrderBy(x => x.FolderName).ToList();
     }
 
 }
